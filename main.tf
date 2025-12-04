@@ -1,27 +1,19 @@
-resource "azurerm_resource_group" "my_rg" {
-  name     = var.resource_group_name
-  location = var.location
-}
-
-resource "azurerm_virtual_network" "vnet" {
-  name                = "my-vnet"
-  resource_group_name = azurerm_resource_group.my_rg.name
+module "RG" {
+  source = "./modules/RG"
+  resource_group_name = var.resource_group_name
   location            = var.location
-  address_space       = ["10.0.0.0/16"]
 }
 
-resource "azurerm_subnet" "subnet" {
-  name                 = "my_subnet1"
-  resource_group_name  = azurerm_resource_group.my_rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.1.0/24"]
+module "network" {
+  source              = "./modules/network"
+  resource_group_name = module.RG.resource_group_name
+  location            = var.location
 }
 
 module "vm" {
   source              = "./modules/vm"
   servers             = var.servers
   location            = var.location
-  resource_group_name = azurerm_resource_group.my_rg.name
-  subnet_id           = azurerm_subnet.subnet.id
+  resource_group_name = module.RG.resource_group_name
+  subnet_id           = module.network.subnet_id
 }
-
