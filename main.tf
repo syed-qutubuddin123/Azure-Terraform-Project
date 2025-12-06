@@ -17,3 +17,11 @@ module "vm" {
   resource_group_name = module.RG.resource_group_name
   subnet_id           = module.network.subnet_id
 }
+
+module "lb" {
+  source              = "./modules/lb"
+  environment         = terraform.workspace
+  location            = var.location
+  resource_group_name = module.RG.resource_group_name
+  vm_nic_ids          = module.vm.vm_nic_ids
+}

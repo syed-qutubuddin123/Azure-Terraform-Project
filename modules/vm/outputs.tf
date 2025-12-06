@@ -1,3 +1,3 @@
-output "vm_ids" {
-  value = { for k, v in azurerm_linux_virtual_machine.my_vm : k => v.id }
+output "vm_nic_ids" {
+  value = { for k, v in azurerm_network_interface.my_nic : k => v.id }
 }
