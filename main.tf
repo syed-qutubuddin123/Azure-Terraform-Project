@@ -25,3 +25,13 @@ module "lb" {
   resource_group_name = module.RG.resource_group_name
   vm_nic_ids          = module.vm.vm_nic_ids
 }
+
+module "dns" {
+  source              = "./modules/dns"
+  resource_group_name = module.RG.resource_group_name
+  domain_name         = "success.com"
+  environment         = terraform.workspace
+  vm_private_ips      = var.vm_private_ips
+  vnet_id             = module.network.vnet_id
+}
+
