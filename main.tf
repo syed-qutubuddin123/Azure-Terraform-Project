@@ -31,7 +31,6 @@ module "dns" {
   resource_group_name = module.RG.resource_group_name
   domain_name         = "success.com"
   environment         = terraform.workspace
-  vm_private_ips      = var.vm_private_ips
+  vm_private_ips      = module.vm.private_ips
   vnet_id             = module.network.vnet_id
 }
-
